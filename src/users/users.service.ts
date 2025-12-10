@@ -72,6 +72,7 @@ export class UsersService {
         email: users.email,
         firstName: users.firstName,
         lastName: users.lastName,
+        role: users.role,
       })
       .from(users);
   }

@@ -1,3 +1,4 @@
+import { USER_ROLE } from 'src/db/db.type';
 import { User } from 'src/db/schema';
 
 export const mockUser: User = {
@@ -6,6 +7,7 @@ export const mockUser: User = {
   firstName: 'Test',
   lastName: 'User',
   password: 'hashed-password',
+  role: USER_ROLE.USER,
 };
 
 export const mockUserWithoutPassword: Omit<User, 'password'> = {
@@ -13,6 +15,7 @@ export const mockUserWithoutPassword: Omit<User, 'password'> = {
   email: 'test@example.com',
   firstName: 'Test',
   lastName: 'User',
+  role: USER_ROLE.USER,
 };
 
 export const mockUpdatedUser: Omit<User, 'password'> = {
@@ -20,6 +23,7 @@ export const mockUpdatedUser: Omit<User, 'password'> = {
   email: 'updated@example.com',
   firstName: 'Updated',
   lastName: 'User',
+  role: USER_ROLE.USER,
 };
 
 export const mockDb = {
