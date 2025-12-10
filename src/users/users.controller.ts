@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Logger,
   Param,
@@ -83,6 +84,22 @@ export class UsersController {
     } catch (error) {
       this.logger.error(
         'Error updating user',
+        error instanceof Error ? error.stack : error,
+      );
+    }
+  }
+
+  // Delete a user
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete a user' })
+  @ApiResponse({ status: 200, description: 'User deleted successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  async remove(@Param('id') id: string) {
+    try {
+      return this.usersService.remove(id);
+    } catch (error) {
+      this.logger.error(
+        'Error deleting user',
         error instanceof Error ? error.stack : error,
       );
     }

@@ -64,6 +64,18 @@ export class UsersService {
     return updatedUser;
   }
 
+  // Delete user
+  async remove(id: string): Promise<{ success: boolean; message: string }> {
+    const existingUser = await this.findById(id);
+    if (!existingUser) {
+      throw new ConflictException('User does not exist');
+    }
+
+    await this.dbService.db.delete(users).where(eq(users.id, id));
+
+    return { success: true, message: 'User deleted successfully' };
+  }
+
   // Find all users
   async findAll(): Promise<Omit<User, 'password'>[]> {
     return await this.dbService.db
@@ -72,6 +84,7 @@ export class UsersService {
         email: users.email,
         firstName: users.firstName,
         lastName: users.lastName,
+        role: users.role,
       })
       .from(users);
   }
