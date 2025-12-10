@@ -1,4 +1,4 @@
-import { USER_ROLE } from 'src/db/db.type';
+import { USER_ROLE } from '../../db/db.type';
 import { User } from 'src/db/schema';
 
 export const mockUser: User = {
