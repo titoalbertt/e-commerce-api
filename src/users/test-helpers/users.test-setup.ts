@@ -15,6 +15,13 @@ export const mockUserWithoutPassword: Omit<User, 'password'> = {
   lastName: 'User',
 };
 
+export const mockUpdatedUser: Omit<User, 'password'> = {
+  id: 'test-uuid',
+  email: 'updated@example.com',
+  firstName: 'Updated',
+  lastName: 'User',
+};
+
 export const mockDb = {
   insert: jest.fn().mockReturnThis(),
   select: jest.fn().mockReturnThis(),
@@ -23,4 +30,6 @@ export const mockDb = {
   values: jest.fn().mockReturnThis(),
   returning: jest.fn().mockResolvedValue([mockUserWithoutPassword]),
   limit: jest.fn().mockResolvedValue([]),
+  update: jest.fn().mockReturnThis(),
+  set: jest.fn().mockReturnThis(),
 };
