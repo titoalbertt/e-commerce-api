@@ -18,6 +18,21 @@ export class UsersController {
   private readonly logger = new Logger(UsersController.name);
   constructor(private readonly usersService: UsersService) {}
 
+  // Get all users
+  @Get()
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({ status: 200, description: 'Users retrieved successfully' })
+  async findAll() {
+    try {
+      return await this.usersService.findAll();
+    } catch (error) {
+      this.logger.error(
+        'Error retrieving user by Id',
+        error instanceof Error ? error.stack : error,
+      );
+    }
+  }
+
   // Get a single user by Id
   @Get(':id')
   @ApiOperation({ summary: 'Get user by Id' })
