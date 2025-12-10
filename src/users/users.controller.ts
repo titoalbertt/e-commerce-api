@@ -23,7 +23,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Get user by Id' })
   @ApiResponse({ status: 200, description: 'User retrieved successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
-  async findById(@Body('id') id: string) {
+  async findById(@Param('id') id: string) {
     try {
       return this.usersService.findById(id);
     } catch (error) {
