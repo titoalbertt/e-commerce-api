@@ -1,13 +1,38 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUsersDto } from './dto/create-users.dto';
+import { UpdateUsersDto } from './dto/update-users.dto';
 
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
   constructor(private readonly usersService: UsersService) {}
+
+  // Get a single user by Id
+  @Get(':id')
+  @ApiOperation({ summary: 'Get user by Id' })
+  @ApiResponse({ status: 200, description: 'User retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  async findById(@Body('id') id: string) {
+    try {
+      return this.usersService.findById(id);
+    } catch (error) {
+      this.logger.error(
+        'Error retrieving user by Id',
+        error instanceof Error ? error.stack : error,
+      );
+    }
+  }
 
   // Create a new user
   @Post()
@@ -23,6 +48,26 @@ export class UsersController {
     } catch (error) {
       this.logger.error(
         'Error creating user',
+        error instanceof Error ? error.stack : error,
+      );
+    }
+  }
+
+  // Update existing user
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update user information' })
+  @ApiResponse({ status: 200, description: 'User updated successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 409, description: 'User does not exist' })
+  async update(
+    @Param('id') id: string,
+    @Body() updateUsersDto: UpdateUsersDto,
+  ) {
+    try {
+      return this.usersService.update(id, updateUsersDto);
+    } catch (error) {
+      this.logger.error(
+        'Error updating user',
         error instanceof Error ? error.stack : error,
       );
     }
