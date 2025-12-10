@@ -7,6 +7,7 @@ import { CreateUsersDto } from '../dto/create-users.dto';
 import { Test } from '@nestjs/testing';
 import { DBService } from '../../db/db.service';
 import { UpdateUsersDto } from '../dto/update-users.dto';
+import { DeleteUsersDto } from '../dto/delete-users.dto';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -53,5 +54,21 @@ describe('UsersService', () => {
 
     const result = await service.update(updateUsersDto.id, updateUsersDto);
     expect(result).toEqual(mockUserWithoutPassword);
+    expect(mockDb.update).toHaveBeenCalled();
+  });
+
+  // Test for deleting a user
+  it('should delete a user successfully', async () => {
+    const deleteUsersDto: DeleteUsersDto = {
+      id: 'test-uuid-123',
+    };
+    mockDb.limit.mockResolvedValueOnce([mockUserWithoutPassword]);
+
+    const result = await service.remove(deleteUsersDto.id);
+    expect(result).toEqual({
+      success: true,
+      message: 'User deleted successfully',
+    });
+    expect(mockDb.delete).toHaveBeenCalled();
   });
 });

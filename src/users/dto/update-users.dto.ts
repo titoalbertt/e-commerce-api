@@ -34,6 +34,14 @@ export class UpdateUsersDto {
   lastName?: string;
 
   @ApiProperty({
+    description: 'User role',
+    example: 'user',
+  })
+  @IsString({ message: 'Role must be a string' })
+  @IsOptional()
+  role?: string;
+
+  @ApiProperty({
     description: 'User password',
     example: 'newStrongPassword@123',
     minLength: 8,
