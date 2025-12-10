@@ -36,4 +36,5 @@ export const mockDb = {
   limit: jest.fn().mockResolvedValue([]),
   update: jest.fn().mockReturnThis(),
   set: jest.fn().mockReturnThis(),
+  delete: jest.fn().mockReturnThis(),
 };
