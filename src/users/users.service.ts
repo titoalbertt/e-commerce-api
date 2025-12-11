@@ -110,4 +110,23 @@ export class UsersService {
 
     return user ?? null;
   }
+
+  // Find user by id without password
+  async findByIdWithoutPassword(
+    id: string,
+  ): Promise<Omit<User, 'password'> | null> {
+    const [user] = await this.dbService.db
+      .select({
+        id: users.id,
+        email: users.email,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        role: users.role,
+      })
+      .from(users)
+      .where(eq(users.id, id))
+      .limit(1);
+
+    return user ?? null;
+  }
 }
