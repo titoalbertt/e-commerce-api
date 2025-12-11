@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators/roles.decorators';
 
-// Define a user interface with the role property
+// User interface with the role property
 interface RequestUser {
   id: string;
   email: string;
@@ -16,7 +16,7 @@ interface RequestUser {
   role: string;
 }
 
-// Define an extended request interface
+// Extended request interface
 interface AuthenticatedRequest {
   user: RequestUser;
 }
