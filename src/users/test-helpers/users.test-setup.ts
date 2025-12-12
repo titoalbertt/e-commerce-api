@@ -1,5 +1,5 @@
 import { USER_ROLE } from '../../db/db.type';
-import { User } from 'src/db/schema';
+import { User } from '../../db/schema';
 
 export const mockUser: User = {
   id: 'test-uuid',
