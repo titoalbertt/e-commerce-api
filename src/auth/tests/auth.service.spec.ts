@@ -105,7 +105,6 @@ describe('AuthService', () => {
         accessToken: mockToken,
         user: mockUserWithoutPassword,
       });
-      // No need to check findByEmail or bcrypt.compare since validateUser is mocked
     });
 
     it('should throw error if credentials are invalid', async () => {
@@ -119,7 +118,6 @@ describe('AuthService', () => {
       await expect(service.login(loginDto)).rejects.toThrow(
         'Invalid credentials',
       );
-      // No need to check findByEmail or bcrypt.compare since validateUser is mocked
     });
   });
 });
