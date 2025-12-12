@@ -46,6 +46,7 @@ export const createMockUsersService = () => ({
 
 export const createMockJwtService = () => ({
   validateUser: jest.fn(),
+  sign: jest.fn(),
   login: jest.fn().mockResolvedValue({
     accessToken: 'mock-access',
     user: mockUserWithoutPassword,

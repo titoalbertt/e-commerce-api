@@ -10,7 +10,6 @@ import {
 
 describe('AuthController', () => {
   let controller: AuthController;
-  let authService: AuthService;
 
   // Mock implementation for AuthService
   const mockAuthService = createMockAuthService();
@@ -27,7 +26,6 @@ describe('AuthController', () => {
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
-    authService = module.get<AuthService>(AuthService);
 
     // Clear all mocks before each test
     jest.clearAllMocks();
@@ -47,9 +45,7 @@ describe('AuthController', () => {
       const result = await controller.login(loginDto);
 
       expect(result).toEqual(authResponse);
-      expect(authService.login.bind(authService)).toHaveBeenCalledWith(
-        loginDto,
-      );
+      expect(mockAuthService.login).toHaveBeenCalledWith(loginDto);
     });
 
     it('should throw error if credentials are invalid', async () => {
@@ -62,9 +58,7 @@ describe('AuthController', () => {
       await expect(controller.login(loginDto)).rejects.toThrow(
         'Invalid credentials',
       );
-      expect(authService.login.bind(authService)).toHaveBeenCalledWith(
-        loginDto,
-      );
+      expect(mockAuthService.login).toHaveBeenCalledWith(loginDto);
     });
   });
 });

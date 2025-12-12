@@ -11,6 +11,12 @@ import {
   createMockJwtService,
 } from '../test-helpers/auth.test-setup';
 
+// Mock bcrypt module
+jest.mock('bcrypt', () => ({
+  compare: jest.fn(),
+  hash: jest.fn(),
+}));
+
 describe('AuthService', () => {
   let service: AuthService;
   let jwtService: JwtService;
@@ -19,10 +25,10 @@ describe('AuthService', () => {
   const mockUsersService = createMockUsersService();
   const mockJwtService = createMockJwtService();
 
-  // Mock bcrypt.compare
-  jest.spyOn(bcrypt, 'compare').mockResolvedValue(true as never);
-
   beforeEach(async () => {
+    // Mock bcrypt.compare
+    (bcrypt.compare as jest.Mock).mockResolvedValue(true as never);
+
     const module = await Test.createTestingModule({
       providers: [
         AuthService,
@@ -48,7 +54,10 @@ describe('AuthService', () => {
 
       expect(result).toEqual(mockUser);
       expect(mockUsersService.findByEmail).toHaveBeenCalledWith(email);
-      expect(bcrypt.compare).toHaveBeenCalledWith(password, mockUser.password);
+      expect(bcrypt.compare as jest.Mock).toHaveBeenCalledWith(
+        password,
+        mockUser.password,
+      );
     });
 
     it('should return null if user does not exist', async () => {
@@ -66,13 +75,16 @@ describe('AuthService', () => {
       const email = 'test@example.com';
       const password = 'wrongpassword';
       mockUsersService.findByEmail.mockResolvedValue(mockUser);
-      jest.spyOn(bcrypt, 'compare').mockResolvedValue(false as never);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(false as never);
 
       const result = await service.validateUser(email, password);
 
       expect(result).toBeNull();
       expect(mockUsersService.findByEmail).toHaveBeenCalledWith(email);
-      expect(bcrypt.compare).toHaveBeenCalledWith(password, mockUser.password);
+      expect(bcrypt.compare as jest.Mock).toHaveBeenCalledWith(
+        password,
+        mockUser.password,
+      );
     });
   });
 
@@ -93,11 +105,7 @@ describe('AuthService', () => {
         accessToken: mockToken,
         user: mockUserWithoutPassword,
       });
-      expect(mockUsersService.findByEmail).toHaveBeenCalledWith(loginDto.email);
-      expect(bcrypt.compare).toHaveBeenCalledWith(
-        loginDto.password,
-        mockUser.password,
-      );
+      // No need to check findByEmail or bcrypt.compare since validateUser is mocked
     });
 
     it('should throw error if credentials are invalid', async () => {
@@ -111,11 +119,7 @@ describe('AuthService', () => {
       await expect(service.login(loginDto)).rejects.toThrow(
         'Invalid credentials',
       );
-      expect(mockUsersService.findByEmail).toHaveBeenCalledWith(loginDto.email);
-      expect(bcrypt.compare).toHaveBeenCalledWith(
-        loginDto.password,
-        mockUser.password,
-      );
+      // No need to check findByEmail or bcrypt.compare since validateUser is mocked
     });
   });
 });
